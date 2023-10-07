@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap demo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style1.css">
+    <style>
+        /* Add custom styles here */
+        .code textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            resize: none;
+            transition: box-shadow 0.3s ease;
+            border: 0px solid red;
+            min-height: 40vh;
+        }
+        .tab-content{
+            margin-top: 10px;
+        }
+        #result {
+            width: 100%;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            resize: none;
+            margin-top: 3.4em;
+            transition: box-shadow 0.3s ease;
+            border: 0px solid red;
+            
+            /* Ensure textarea expands to fit its content */
+            min-height: 40vh;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-6 menu_button">
+                <!-- Add your menu buttons with icons here -->
+                <div class="btn-group" role="group" aria-label="Menu buttons">
+                    <button onclick="showTab('html')" type="button" class="btn btn-primary " style="border-radius: 10px;">
+                        <i class="fas fa-code"></i> HTML
+                    </button>
+                    <button onclick="showTab('css')" type="button" class="btn btn-success  ms-2" style="border-radius: 10px;">
+                        <i class="fas fa-paint-bucket"></i> CSS
+                    </button>
+                    <button onclick="showTab('js')" type="button" class="btn btn-warning ms-2" style="border-radius: 10px;">
+                        <i class="fab fa-js"></i> JS
+                    </button>
+                </div>
+            </div>
+            <div class="col-6 menu_button">
+                <h3>Output</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="code">
+                    <div class="html-code tab-content">
+                        <h2>HTML</h2>
+                        <textarea placeholder="Enter your HTML code here..." oninput="updateOutput()">
+                            <!-- Default HTML content -->
+                            <div>
+                                <h1>Hello, World!</h1>
+                                <p>This is some default HTML content.</p>
+                            </div>
+                        </textarea>
+                    </div>
+                    <div class="css-code tab-content">
+                        <h2>CSS</h2>
+                        <textarea placeholder="Enter your CSS code here..." oninput="updateOutput()">
+                            /* Default CSS styles */
+                            body {
+                                background-color: #f0f0f0;
+                                font-family: Arial, sans-serif;
+                            }
+
+                            h1 {
+                                color: blue;
+                            }
+
+                            p {
+                                color: green;
+                            }
+                        </textarea>
+                    </div>
+                    <div class="js-code tab-content">
+                        <h2>JS</h2>
+                        <textarea spellcheck="false" placeholder="Enter your JS code here..." oninput="updateOutput()">
+                            // Default JavaScript code
+                            console.log('Hello from JavaScript!');
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="output">
+                    <iframe id="result"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showTab(tabName) {
+        // Hide all tabs
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(tab => {
+            tab.style.display = 'none';
+        });
+
+        // Show the selected tab
+        const selectedTab = document.querySelector(`.${tabName}-code`);
+        if (selectedTab) {
+            selectedTab.style.display = 'block';
+
+            // Highlight the selected button
+            const buttons = document.querySelectorAll('.menu_button button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            const selectedButton = document.querySelector(`.menu_button button[data-tab="${tabName}"]`);
+            if (selectedButton) {
+                selectedButton.classList.add('active');
+            }
+        }
+    }
+
+    function updateOutput() {
+        const htmlCode = document.querySelector('.html-code textarea').value;
+        const cssCode = document.querySelector('.css-code textarea').value;
+        const jsCode = document.querySelector('.js-code textarea').value;
+        const result = document.querySelector('#result');
+
+        // Executing HTML, CSS & JS code
+        result.contentDocument.body.innerHTML = `<style>${cssCode}</style>` + htmlCode;
+        result.contentWindow.eval(jsCode);
+    }
+
+    // Set initial state: Show the HTML tab
+    window.onload = function () {
+        showTab('html');
+        updateOutput(); // Update output when the page loads
+    };
+</script>
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Font Awesome JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+</body>
+</html>
